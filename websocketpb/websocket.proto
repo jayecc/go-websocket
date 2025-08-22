@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package websocket;
+
+option go_package = "./websocketpb";
+
+service Websocket {
+	rpc Emit (EmitRequest) returns (EmitResponse);
+	rpc Online (OnlineRequest) returns (OnlineResponse);
+	rpc Broadcast (BroadcastRequest) returns (BroadcastResponse);
+}
+
+message EmitRequest {
+	string id = 1;
+	bytes data = 2;
+}
+
+message EmitResponse{
+	bool success = 1;
+}
+
+message OnlineRequest {
+	string id = 1;
+}
+
+message OnlineResponse {
+	bool online = 1;
+}
+
+message BroadcastRequest {
+	bytes data = 1;
+}
+
+message BroadcastResponse {
+	int64 count = 1;
+}
