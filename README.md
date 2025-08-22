@@ -57,7 +57,7 @@ import (
     "time"
     
     "github.com/gin-gonic/gin"
-    "weserver/websocket"
+    websocket "github.com/jayecc/go-websocket"
 )
 
 func main() {
@@ -125,8 +125,8 @@ import (
     "golang.org/x/sync/errgroup"
     "google.golang.org/grpc"
     
-    "weserver/websocket"
-    "weserver/websocket/websocketpb"
+    websocket "github.com/jayecc/go-websocket"
+    "github.com/jayecc/go-websocket/websocketpb"
 )
 
 func main() {
