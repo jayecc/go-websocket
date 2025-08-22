@@ -35,7 +35,7 @@ Distributed WebSocket 是一个支持分布式部署的 WebSocket 服务框架�
 ## 安装
 
 ```bash
-go get github.com/your-repo/websocket
+go get github.com/jayecc/go-websocket
 ```
 
 ## 依赖
