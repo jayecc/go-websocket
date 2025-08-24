@@ -71,7 +71,7 @@ func main() {
 
     // 注册WebSocket路由
     app.GET("/ws", func(ctx *gin.Context) {
-        client := websocket.NewClient(hub)
+        client := websocket.NewClient(hub, websocket.WithId("xxxx"))
 
         // 设置连接回调
         client.OnConnect(func(conn *websocket.Client) {
@@ -150,7 +150,7 @@ func main() {
     defer websocketHub.Close()
     
     // 创建分布式WebSocket客户端
-    websocketClient := websocket.NewDistClient(storage)
+    websocketClient := websocket.NewDistClient(storage, websocket.WithId("xxxx"))
 
     // 启动 gRPC 服务器
     serverGroup.Go(func() error {
