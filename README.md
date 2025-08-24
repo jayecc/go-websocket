@@ -150,7 +150,7 @@ func main() {
     defer websocketHub.Close()
     
     // 创建分布式WebSocket客户端
-    websocketClient := websocket.NewDistClient(storage, websocket.WithId("xxxx"))
+    websocketClient := websocket.NewDistClient(storage)
 
     // 启动 gRPC 服务器
     serverGroup.Go(func() error {
@@ -176,7 +176,7 @@ func main() {
         
         // 注册WebSocket路由
         app.GET("/ws", func(ctx *gin.Context) {
-            session := websocket.NewDistSession(websocketHub, storage, grpcHost)
+            session := websocket.NewDistSession(websocketHub, storage, grpcHost, websocket.WithId("xxxx"))
             
             session.OnError(func(id string, err error) {
                 log.Printf("OnError: %v\n", err)
