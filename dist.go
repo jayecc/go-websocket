@@ -244,3 +244,45 @@ func (c *DistClient) Broadcast(ctx context.Context, message []byte) (count int64
 	}
 	return
 }
+
+// BroadcastV2 向所有存储的地址广播消息
+// 参数:
+//
+//	ctx - 上下文，用于控制请求的生命周期
+//	message - 要广播的消息数据
+//
+// 返回值:
+//
+//	count - 成功广播的消息计数
+//	err - 广播过程中发生的错误
+func (c *DistClient) BroadcastV2(ctx context.Context, message []byte) (count int64, err error) {
+	addrs, err := c.storage.All()
+	if err != nil {
+		return
+	}
+
+	// 使用map去重，避免向同一地址多次发送
+	uniqueAddrs := make(map[string]struct{})
+	for _, addr := range addrs {
+		uniqueAddrs[addr] = struct{}{}
+	}
+
+	// 遍历所有唯一地址并广播消息
+	for addr := range uniqueAddrs {
+		conn, err := grpcClientConn(addr)
+		if err != nil {
+			continue
+		}
+
+		response, err := websocketpb.NewWebsocketClient(conn).Broadcast(ctx, &websocketpb.BroadcastRequest{
+			Data: message,
+		})
+		if err != nil {
+			continue
+		}
+
+		count += response.Count
+	}
+
+	return
+}
