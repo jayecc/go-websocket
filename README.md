@@ -1,11 +1,11 @@
 # Distributed WebSocket
 
-Distributed WebSocket 是一个支持分布式部署的 WebSocket 服务框架，基于 Go 语言实现。它通过 Redis 存储客户端连接信息，利用 gRPC 在服务节点间传递消息，实现了跨节点的实时通信。
+Distributed WebSocket 是一个支持分布式部署的 WebSocket 服务框架，基于 Go 语言实现。它通过 Redis/Etcd 存储客户端连接信息，利用 gRPC 在服务节点间传递消息，实现了跨节点的实时通信。
 
 ## 特性
 
 - 支持单节点和分布式部署
-- 基于 Redis 的连接信息共享
+- 基于 Redis/Etcd 的连接信息共享
 - 通过 gRPC 实现跨节点消息传递
 - 高性能的 WebSocket 连接处理
 - 自动连接管理和消息广播
@@ -14,9 +14,9 @@ Distributed WebSocket 是一个支持分布式部署的 WebSocket 服务框架�
 ## 架构
 
 ```
-┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│  WebSocket 客户端 │────▶│ WebSocket 服务节点 │◀───▶│     Redis       │
-└─────────────────┘     └──────────────────┘     └─────────────────┘
+┌──────────────────┐     ┌───────────────────┐    ┌───────────────┐
+│  WebSocket 客户端 │────▶│ WebSocket 服务节点 │◀───▶│  Redis/Etcd  │
+└──────────────────┘     └───────────────────┘    └───────────────┘
                                │      ▲
                                ▼      │
                         ┌──────────────────┐
@@ -29,7 +29,7 @@ Distributed WebSocket 是一个支持分布式部署的 WebSocket 服务框架�
 
 1. **WebSocket 客户端** - 浏览器或其他设备建立 WebSocket 连接
 2. **WebSocket 服务节点** - 承载 WebSocket 连接，处理消息收发
-3. **Redis** - 存储连接的元信息（connection_id ↔ 节点IP+端口）
+3. **Redis/Etcd** - 存储连接的元信息（connection_id ↔ 节点IP+端口）
 4. **gRPC 服务** - 节点间通过 gRPC 互相发送消息
 
 ## 安装
