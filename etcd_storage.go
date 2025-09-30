@@ -119,7 +119,7 @@ func (s *EtcdStorage) Clear(host string) error {
 	if err != nil {
 		return err
 	}
-	remove := make([]string, 0)
+	remove := make([]string, 0, len(all))
 	for id, addr := range all {
 		if addr != host {
 			continue
