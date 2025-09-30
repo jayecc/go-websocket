@@ -115,11 +115,28 @@ func (s *EtcdStorage) Del(keys ...string) error {
 // 返回值:
 //   - error: 操作过程中发生的错误（如果有）
 func (s *EtcdStorage) Clear(host string) error {
-	// host 作为前缀，比如 /ws/{host}/clientID
+	all, err := s.All()
+	if err != nil {
+		return err
+	}
+	remove := make([]string, 0)
+	for id, addr := range all {
+		if addr != host {
+			continue
+		}
+		remove = append(remove, id)
+	}
+	if len(remove) == 0 {
+		return nil
+	}
 	ctx, cancel := s.contextTimeout()
 	defer cancel()
-	_, err := s.client.Delete(ctx, s.prefix+host+"/", clientv3.WithPrefix())
-	return err
+	for _, key := range remove {
+		if _, err = s.client.Delete(ctx, s.prefix+key); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // All 获取当前前缀下的所有键值对。
